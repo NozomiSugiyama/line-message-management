@@ -6,7 +6,8 @@
   "author": "NozomiSugiyama <rioc.sugiyama@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "env NODE_ENV=development webpack-dev-server --config webpack.config.js",
+    "dev": "env NODE_ENV=development webpack-dev-server --config webpack.config.js",
+    "start": "node server",
     "start:prod": "env NODE_ENV=production webpack-dev-server --config webpack.config.js",
     "build": "yarn build:dev",
     "build:dev": "env NODE_ENV=development webpack --mode=development --config webpack.config.js",
