@@ -10,7 +10,7 @@
     "dev": "env NODE_ENV=development webpack-dev-server --config webpack.config.js",
     "start": "node server",
     "start:prod": "env NODE_ENV=production webpack-dev-server --config webpack.config.js",
-    "build": "yarn build:dev",
+    "build": "yarn build:prod",
     "build:dev": "env NODE_ENV=development webpack --mode=development --config webpack.config.js",
     "build:prod": "env NODE_ENV=production webpack --mode=production --config webpack.config.js",
     "lint": "tslint -p ./ -c ./tslint.json './src/**/*.ts{,x}'",
