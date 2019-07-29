@@ -24,7 +24,7 @@ console.log(`Server listening on ${port}`);
 setTimeout(() => `!? ${port}`, 1000);
 
 var fs = require('fs');
-fs.readdir('.', function(err, files){
+fs.readdir(path.join(__dirname + '/../dist/index.html'), function(err, files){
     if (err) throw err;
     var fileList = files.filter(function(file){
         return fs.statSync(file).isFile(); //絞り込み
