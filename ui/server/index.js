@@ -26,10 +26,7 @@ setTimeout(() => console.log(`!? ${port}`), 5000);
 var fs = require('fs');
 fs.readdir(path.join(__dirname + '/../dist'), function(err, files){
     if (err) throw err;
-    var fileList = files.filter(function(file){
-        return fs.statSync(file).isFile(); //絞り込み
-    })
     console.log("-------------");
-    console.log(fileList);
+    console.log(files);
     console.log("-------------");
 });
