@@ -1,0 +1,69 @@
+# LINE Message managemenet ui
+
+### Development
+
+#### Setup
+```bash
+$ yarn
+```
+
+#### Debug
+```bash
+$ yarn
+
+$ yarn dev
+```
+
+### Deploy
+#### Setup
+```bash
+$ heroku login
+$ git remote add heroku-api https://git.heroku.com/line-message-management-api.git
+$ git remote add heroku-api https://git.heroku.com/line-message-management-ui.git
+```
+
+#### Deploy API
+```bash
+$ git subtree push --prefix api/ heroku-api master
+```
+#### Deploy UI
+```bash
+$ git subtree push --prefix ui/ heroku-ui master
+```
+
+##### Develop
+###### Editor setup
+https://github.com/styled-components/vscode-styled-components
+
+##### Deploy
+```bash
+$ yarn deploy
+or
+$ yarn deploy --profile PROFILE_NAME
+```
+
+#### file size analyze
+##### cmd
+```bash
+$ yarn size-analyze
+```
+
+##### web-view
+uncomment `// new BundleAnalyzerPlugin()` in `webpack.config.(dev|prod).js`
+```js
+...
+    plugins: [
+        new BundleAnalyzerPlugin(), // <- uncomment
+        new DefinePlugin(
+            Object.entries(process.env)
+                .map(x => ({["process.env." + x[0]]: JSON.stringify(x[1])}))
+                .reduce((x, y) => Object.assign(x, y), {}),
+        )
+    ],
+...
+```
+
+#### Generate Documents
+```bash
+$ yarn docs
+```

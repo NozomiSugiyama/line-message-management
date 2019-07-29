@@ -2,7 +2,7 @@ import Fab from "@material-ui/core/Fab";
 import React from "react";
 import styled from "styled-components";
 
-export default (props: React.ComponentProps<typeof FixedFab>) => <FixedFab {...props}/>;
+export default (props: React.ComponentProps<typeof FixedFab>) => <FixedFab color="primary" {...props}/>;
 
 const FixedFab = styled(Fab)`
     && {

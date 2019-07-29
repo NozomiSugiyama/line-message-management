@@ -23,8 +23,6 @@ export default createMuiTheme({
     palette: {
         primary: {
             contrastText: "#fff",
-            dark: "#c56200",
-            light: "#ffc246",
             main: MAIN_COLOR,
         },
     }
