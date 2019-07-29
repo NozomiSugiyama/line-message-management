@@ -66,7 +66,7 @@ module.exports = {
         ),
         new HtmlWebpackPlugin({
             hash: true,
-            title: "Service Name" + (NODE_ENV === "development" ? " - dev" : ""),
+            title: "LINE配信管理" + (NODE_ENV === "development" ? " - dev" : ""),
             minify: (
                 NODE_ENV === "production" ? {
                     caseSensitive: true,

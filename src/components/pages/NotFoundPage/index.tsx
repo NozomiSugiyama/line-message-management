@@ -8,19 +8,16 @@ import Content from "src/components/pages/NotFoundPage/Content";
 
 export type NotFoundPageProps = React.ComponentProps<typeof Page> & RouteChildrenProps<{problemId: string}>;
 
-export default (props: NotFoundPageProps) => {
-
-    return (
-        <Page
-            ref={props.ref as any}
-            {...props}
-        >
-            <Header
-                appTitle={<LocationText text="Not Found"/>}
-            />
-            <Content>
-                <NotFound/>
-            </Content>
-        </Page>
-    );
-};
+export default (props: NotFoundPageProps) => (
+    <Page
+        ref={props.ref}
+        {...props}
+    >
+        <Header
+            appTitle={<LocationText text="Not Found"/>}
+        />
+        <Content>
+            <NotFound/>
+        </Content>
+    </Page>
+);

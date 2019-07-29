@@ -1,5 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
+const MAIN_COLOR = "#27365d";
+
 export default createMuiTheme({
     overrides: {
         MuiDrawer: {
@@ -23,7 +25,7 @@ export default createMuiTheme({
             contrastText: "#fff",
             dark: "#c56200",
             light: "#ffc246",
-            main: "#ff9100",
+            main: MAIN_COLOR,
         },
     }
 });
