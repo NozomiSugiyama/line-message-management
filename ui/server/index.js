@@ -17,8 +17,19 @@ app.listen(port);
 // For all GET requests, send back index.html
 // so that PathLocationStrategy can be used
 app.get('/*', (req, res) => {
-    console.log("help");
     res.sendFile(path.join(__dirname + '/../dist/index.html'))
 });
 
 console.log(`Server listening on ${port}`);
+setTimeout(() => `!? ${port}`, 1000);
+
+var fs = require('fs');
+fs.readdir('.', function(err, files){
+    if (err) throw err;
+    var fileList = files.filter(function(file){
+        return fs.statSync(file).isFile(); //絞り込み
+    })
+    console.log("-------------");
+    console.log(fileList);
+    console.log("-------------");
+});
