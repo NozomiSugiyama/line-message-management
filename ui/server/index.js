@@ -21,12 +21,3 @@ app.get('/*', (req, res) => {
 });
 
 console.log(`Server listening on ${port}`);
-setTimeout(() => console.log(`!? ${port}`), 5000);
-
-var fs = require('fs');
-fs.readdir(path.join(__dirname + '/../dist'), function(err, files){
-    if (err) throw err;
-    console.log("-------------");
-    console.log(files);
-    console.log("-------------");
-});
