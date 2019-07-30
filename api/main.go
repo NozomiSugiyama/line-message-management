@@ -16,7 +16,6 @@ func main() {
 	port := os.Getenv("PORT")
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
-	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
 	providerWebURL := os.Getenv("PROVIDER_WEB_URL")
 
 	if port == "" {
