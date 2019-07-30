@@ -65,15 +65,5 @@ func main() {
 }
 
 func getResMessage(reqMessage string) (message string) {
-	resMessages := [3]string{"testes", "test2", "test3"}
-
-	rand.Seed(time.Now().UnixNano())
-	if rand.Intn(5) == 0 {
-		if math := rand.Intn(4); math != 3 {
-			message = resMessages[math]
-		} else {
-			message = "replay :" + reqMessage
-		}
-	}
-	return
+	message = "replay :" + reqMessage
 }
