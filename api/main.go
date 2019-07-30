@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/linebot"
-	"math/rand"
 	"time"
 )
 
@@ -66,4 +65,5 @@ func main() {
 
 func getResMessage(reqMessage string) (message string) {
 	message = "reply :" + reqMessage
+	return
 }
