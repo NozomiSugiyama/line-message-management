@@ -17,10 +17,7 @@ func main() {
 	port := os.Getenv("PORT")
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
-
-	log.Print("=============")
-	log.Print(lineChannelAccessToken)
-	log.Print("=============")
+	log.Print("======= Debug point 1 ======")
 
 	if port == "" {
 		port = "8080"
@@ -30,25 +27,33 @@ func main() {
 	router.Use(gin.Logger())
 
 	router.POST("/hook", func(c *gin.Context) {
+		log.Print("======= Debug point 2 ======")
 		client := &http.Client{Timeout: time.Duration(15 * time.Second)}
 		bot, err := linebot.New(lineChannelSecret, lineChannelAccessToken, linebot.WithHTTPClient(client))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		log.Print("======= Debug point 3 ======")
 		received, err := bot.ParseRequest(c.Request)
 
 		for _, event := range received {
+			log.Print("======= Debug point 4 ======")
+			log.Print(linebot.EventTypeMessage)
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
+					log.Print("======= Debug point 5 ======")
 					source := event.Source
 					if source.Type == linebot.EventSourceTypeRoom {
+						log.Print("======= Debug point 6 ======")
 						if resMessage := getResMessage(message.Text); resMessage != "" {
+							log.Print("======= Debug point 7 ======")
 							postMessage := linebot.NewTextMessage(resMessage)
 							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
 								log.Print(err)
 							}
+							log.Print("======= Debug point 8 ======")
 						}
 					}
 				}
