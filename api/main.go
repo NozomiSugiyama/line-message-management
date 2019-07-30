@@ -43,11 +43,14 @@ func main() {
 					if source.Type == linebot.EventSourceTypeUser {
 						switch message.Text {
 						case "連携":
-							if res, err := bot.IssueLinkToken(source.UserID).Do(); err != nil {
-								postMessage := linebot.NewTextMessage("http://localhost:8080/user-sign-in?link-token=" + res.LinkToken)
-								if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
-									log.Print(err)
-								}
+							res, err := bot.IssueLinkToken(source.UserID).Do()
+							if err != nil {
+								log.Print(err)
+								return
+							}
+							postMessage := linebot.NewTextMessage("http://localhost:8080/user-sign-in?link-token=" + res.LinkToken)
+							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
+								log.Print(err)
 							}
 						default:
 							postMessage := linebot.NewTextMessage("reply :" + message.Text)
