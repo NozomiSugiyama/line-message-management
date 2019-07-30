@@ -1,4 +1,4 @@
-# LINE Message managemenet ui
+# LINE Message management ui
 
 ### Development
 
