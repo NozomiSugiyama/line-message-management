@@ -45,7 +45,7 @@ func main() {
 				case *linebot.TextMessage:
 					log.Print("======= Debug point 5 ======")
 					source := event.Source
-					if source.Type == linebot.EventSourceTypeRoom {
+					if source.Type == linebot.EventSourceTypeUser {
 						log.Print("======= Debug point 6 ======")
 						if resMessage := getResMessage(message.Text); resMessage != "" {
 							log.Print("======= Debug point 7 ======")
