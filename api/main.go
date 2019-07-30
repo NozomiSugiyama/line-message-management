@@ -70,5 +70,5 @@ func getResMessage(reqMessage string) (message string) {
 			message = "replay :" + reqMessage
 		}
 	}
-	return
+	return message
 }

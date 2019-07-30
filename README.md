@@ -12,7 +12,7 @@ $ heroku plugins:install heroku-config
 
 #### Deploy API
 ```bash
-$ heroku config:push --app line-message-management-api
+$ heroku config:push -f api/.env --app line-message-management-api # if modified .env file
 $ git subtree push --prefix api/ heroku-api master
 ```
 #### Deploy UI
