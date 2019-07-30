@@ -65,5 +65,5 @@ func main() {
 }
 
 func getResMessage(reqMessage string) (message string) {
-	message = "replay :" + reqMessage
+	message = "reply :" + reqMessage
 }
