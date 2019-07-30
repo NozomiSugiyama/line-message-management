@@ -26,33 +26,34 @@ func main() {
 	router.Use(gin.Logger())
 
 	router.POST("/hook", func(c *gin.Context) {
-		log.Print("======= Debug point 2 ======")
 		client := &http.Client{Timeout: time.Duration(15 * time.Second)}
 		bot, err := linebot.New(lineChannelSecret, lineChannelAccessToken, linebot.WithHTTPClient(client))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		log.Print("======= Debug point 3 ======")
 		received, err := bot.ParseRequest(c.Request)
 
 		for _, event := range received {
-			log.Print("======= Debug point 4 ======")
 			log.Print(linebot.EventTypeMessage)
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					log.Print("======= Debug point 5 ======")
 					source := event.Source
 					if source.Type == linebot.EventSourceTypeUser {
-						log.Print("======= Debug point 6 ======")
-						if resMessage := getResMessage(message.Text); resMessage != "" {
-							log.Print("======= Debug point 7 ======")
-							postMessage := linebot.NewTextMessage(resMessage)
+						switch message.Text {
+						case "連携":
+							if res, err := bot.IssueLinkToken(source.UserID).Do(); err != nil {
+								postMessage := linebot.NewTextMessage("http://localhost:8080/user-sign-in?link-token=" + res.LinkToken)
+								if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
+									log.Print(err)
+								}
+							}
+						default:
+							postMessage := linebot.NewTextMessage("reply :" + message.Text)
 							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
 								log.Print(err)
 							}
-							log.Print("======= Debug point 8 ======")
 						}
 					}
 				}
@@ -61,9 +62,4 @@ func main() {
 	})
 
 	router.Run(":" + port)
-}
-
-func getResMessage(reqMessage string) (message string) {
-	message = "reply :" + reqMessage
-	return
 }
