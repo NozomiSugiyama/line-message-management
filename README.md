@@ -7,10 +7,12 @@ LineのMessage APIを用いて、セグメント配信を行うためのテス�
 $ heroku login
 $ git remote add heroku-api https://git.heroku.com/line-message-management-api.git
 $ git remote add heroku-api https://git.heroku.com/line-message-management-ui.git
+$ heroku plugins:install heroku-config
 ```
 
 #### Deploy API
 ```bash
+$ heroku config:push --app line-message-management-api
 $ git subtree push --prefix api/ heroku-api master
 ```
 #### Deploy UI

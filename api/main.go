@@ -18,6 +18,10 @@ func main() {
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
 
+	log.Print("=============")
+	log.Print(lineChannelAccessToken)
+	log.Print("=============")
+
 	if port == "" {
 		port = "8080"
 	}
