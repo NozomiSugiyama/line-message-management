@@ -16,7 +16,8 @@ func main() {
 	port := os.Getenv("PORT")
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
-	log.Print("======= Debug point 1 ======")
+	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
+	providerWebURL := os.Getenv("PROVIDER_WEB_URL")
 
 	if port == "" {
 		port = "8080"
@@ -48,7 +49,7 @@ func main() {
 								log.Print(err)
 								return
 							}
-							postMessage := linebot.NewTextMessage("http://localhost:8080/user-sign-in?link-token=" + res.LinkToken)
+							postMessage := linebot.NewTextMessage(providerWebURL + "/user-sign-in?link-token=" + res.LinkToken)
 							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
 								log.Print(err)
 							}
