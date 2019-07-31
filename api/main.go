@@ -6,25 +6,65 @@ import (
 	"os"
 
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 
+	"api/database"
 	"github.com/gin-gonic/gin"
-	_ "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 func main() {
+
+	mode := os.Args[1]
+	var envFile string
+	if mode == "prod" {
+		envFile = ".env.production"
+	} else {
+		envFile = ".env.development"
+	}
+
+	err := godotenv.Load(envFile)
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	port := os.Getenv("PORT")
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
 	providerWebOrigin := os.Getenv("PROVIDER_WEB_ORIGIN")
+	postgresHost := os.Getenv("POSTGRES_HOST")
+	postgresDatabase := os.Getenv("POSTGRES_DATABASE")
+	postgresPort := os.Getenv("POSTGRES_PORT")
+	postgresUser := os.Getenv("POSTGRES_USER")
+	postgresPassword := os.Getenv("POSTGRES_PASSWORD")
+	postgresSSLMode := os.Getenv("POSTGRES_SSL_MODE")
 
 	if port == "" {
 		port = "8080"
 	}
 
+	var db *gorm.DB
+
+	for i := 0; i < 10; i++ {
+		db, err = database.Initialize(postgresHost, postgresPort, postgresUser, postgresDatabase, postgresPassword, postgresSSLMode)
+		if err != nil {
+			log.Println("Failed database initialize")
+			log.Println(err)
+			if i >= 9 {
+				panic(err)
+			}
+			time.Sleep(10 * time.Second)
+		} else {
+			log.Println("Connected database")
+			break
+		}
+	}
+
 	router := gin.New()
 	router.Use(gin.Logger())
+	router.Use(database.Inject(db))
 
 	router.POST("/hook", func(c *gin.Context) {
 		client := &http.Client{Timeout: time.Duration(15 * time.Second)}

@@ -9,15 +9,14 @@ go version go1.12.1 darwin/amd64
 
 ### Setup
 ```bash
-$ cp .env-sample .env
+$ cp .env.production.sample .env.development # dev mode
+$ cp .env.sample .env.production # prod mode
 $ vim .env # Edit .env file
-$ go build
 ```
 
 ### Debug
-```bash
-```
 
-### Deploy
 ```bash
+$ go build
+$ ./api dev
 ```
