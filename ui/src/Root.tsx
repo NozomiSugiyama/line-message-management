@@ -7,7 +7,7 @@ import Notification from "src/components/containers/Notification";
 import RouterHistory from "src/components/containers/RouterHistory";
 import muiTheme from "src/muiTheme";
 
-// Do not change of componet order
+// Do not change of component order
 export default (
     {
         children
@@ -16,16 +16,18 @@ export default (
     }
 ) => (
     <ErrorBoundary>
-        <RouterHistory>
-            <ThemeProvider theme={muiTheme}>
-                <Notification>
-                    <Auth>
-                        <MainLayout>
-                            {children}
-                        </MainLayout>
-                    </Auth>
-                </Notification>
-            </ThemeProvider>
-        </RouterHistory>
+        <React.StrictMode>
+            <RouterHistory>
+                <ThemeProvider theme={muiTheme}>
+                    <Notification>
+                        <Auth>
+                            <MainLayout>
+                                {children}
+                            </MainLayout>
+                        </Auth>
+                    </Notification>
+                </ThemeProvider>
+            </RouterHistory>
+        </React.StrictMode>
     </ErrorBoundary>
 );
