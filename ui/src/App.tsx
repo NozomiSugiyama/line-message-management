@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Root from "src/Root";
 import {
+    ClientSignInPage,
     NotFoundPage,
     TopPage
 } from "src/Routes";
@@ -18,6 +19,11 @@ export default () => (
                 <Route
                     path="/top"
                     component={TopPage}
+                    exact
+                />
+                <Route
+                    path="/client-sign-in"
+                    component={ClientSignInPage}
                     exact
                 />
                 <Route component={NotFoundPage}/>

@@ -2,8 +2,6 @@ import { Drawer } from "@material-ui/core";
 import React, { useState } from "react";
 import Navigator from "src/components/molecules/Navigator";
 import DrawerContext from "src/contexts/DrawerContext";
-import LocalizationContext from "src/contexts/LocalizationContext";
-import locationTextList, { Location } from "src/localization/locale";
 import styled from "styled-components";
 
 export default (
@@ -13,53 +11,44 @@ export default (
         children?: React.ReactNode
     }
 ) => {
-    const [location, setLocation] = useState<Location>(
-        () => {
-            const language = (window.navigator.languages && window.navigator.languages[0]) || window.navigator.language;
-            return language === "ja" || language === "ja-JP" ? "jp" : "us";
-        }
-    );
-    const [drawerOpend, setDrawerOpen] = useState<boolean>(false);
+    const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
 
-    const toggleDrawer = () => setDrawerOpen(!drawerOpend);
-    const handleLocale = () => setLocation(location === "us" ? "jp" : "us");
+    const toggleDrawer = () => setDrawerOpen(!drawerOpened);
+    const hideDrawer = () => drawerOpened && setDrawerOpen(false);
+    const showDrawer = () => !drawerOpened && setDrawerOpen(true);
 
     return (
         <Host>
-            <LocalizationContext.Provider
-                value={{
-                    handleLocale,
-                    location,
-                    locationText: locationTextList[location]
-                }}
-            >
-                <div>
-                    <Drawer
-                        variant="temporary"
-                        anchor={"left"}
-                        open={drawerOpend}
-                        onClose={toggleDrawer}
-                        ModalProps={{ keepMounted: true }}
-                    >
-                        <Navigator/>
-                    </Drawer>
-                </div>
-                <div>
-                    <Drawer
-                        variant="permanent"
-                        open
-                    >
-                        <Navigator/>
-                    </Drawer>
-                </div>
-                <Content>
-                    <DrawerContext.Provider
-                        value={{ toggleDrawer }}
-                    >
-                        {children}
-                    </DrawerContext.Provider>
-                </Content>
-            </LocalizationContext.Provider>
+            <div>
+                <Drawer
+                    variant="temporary"
+                    anchor={"left"}
+                    open={drawerOpened}
+                    onClose={toggleDrawer}
+                    ModalProps={{ keepMounted: true }}
+                >
+                    <Navigator/>
+                </Drawer>
+            </div>
+            <div>
+                <Drawer
+                    variant="permanent"
+                    open
+                >
+                    <Navigator/>
+                </Drawer>
+            </div>
+            <Content>
+                <DrawerContext.Provider
+                    value={{
+                        toggle: toggleDrawer,
+                        hide: hideDrawer,
+                        show: showDrawer
+                    }}
+                >
+                    {children}
+                </DrawerContext.Provider>
+            </Content>
         </Host>
     );
 };

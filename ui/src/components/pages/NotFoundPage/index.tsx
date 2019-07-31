@@ -1,6 +1,5 @@
 import React from "react";
 import { RouteChildrenProps } from "react-router";
-import LocationText from "src/components/atoms/LocationText";
 import Page from "src/components/atoms/Page";
 import Header from "src/components/molecules/Header";
 import NotFound from "src/components/molecules/NotFound";
@@ -10,11 +9,10 @@ export type NotFoundPageProps = React.ComponentProps<typeof Page> & RouteChildre
 
 export default (props: NotFoundPageProps) => (
     <Page
-        ref={props.ref}
         {...props}
     >
         <Header
-            appTitle={<LocationText text="Not Found"/>}
+            appTitle="Not Found"
         />
         <Content>
             <NotFound/>

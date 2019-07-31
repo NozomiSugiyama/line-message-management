@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 // Make the minimum configuration.
 export interface ErrorBoundaryState {
@@ -56,8 +56,23 @@ export default class ErrorBoundary extends React.Component<{ children?: React.Re
                     </button>
                     <hr/>
                     <h2>Debug message for developer</h2>
-                    <pre>{this.state.error && (this.state.error.message || this.state.error.toString())}</pre>
-                    <pre>{JSON.stringify(this.state.info)}</pre>
+                    <br/>
+                    <pre style={{ fontSize: "1.5rem" }}>{this.state.error && (this.state.error.message || this.state.error.toString())}</pre>
+                    <pre>
+                        {React.isValidElement(this.state.info) ? this.state.info
+                       :                                         Object.entries(this.state.info).map(([key, value]: [string, any]) => (
+                            <div key={key}>
+                                <div>{key}</div>
+                                <div>
+                                    {typeof value === "string"   ? value.split("\n").map(x => <Fragment key={x}>{x}<br/></Fragment>)
+                                   : React.isValidElement(value) ? value
+                                   :                               JSON.stringify(value)
+                                    }
+                                </div>
+                            </div>
+                        ))
+                        }
+                    </pre>
                 </div>
             );
         }

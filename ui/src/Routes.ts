@@ -8,5 +8,6 @@
 //     loading: Loading,
 // });
 
+export { default as ClientSignInPage } from "src/components/pages/ClientSignInPage";
 export { default as NotFoundPage } from "src/components/pages/NotFoundPage";
 export { default as TopPage } from "src/components/pages/TopPage";

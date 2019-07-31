@@ -8,7 +8,7 @@ import DrawerContext from "src/contexts/DrawerContext";
 import styled from "styled-components";
 
 export interface HeaderProps extends AppBarProps {
-    appTitle: JSX.Element;
+    appTitle: React.ReactChild;
 }
 
 export default (
@@ -28,7 +28,7 @@ export default (
                 <MenuIconButton
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={drawer.toggleDrawer}
+                    onClick={drawer.toggle}
                 >
                     <MenuIcon/>
                 </MenuIconButton>
