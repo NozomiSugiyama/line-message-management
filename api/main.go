@@ -6,10 +6,11 @@ import (
 	"os"
 
 	"fmt"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/linebot"
-	"time"
 )
 
 func main() {
@@ -35,8 +36,13 @@ func main() {
 		received, err := bot.ParseRequest(c.Request)
 
 		for _, event := range received {
-			log.Print(linebot.EventTypeMessage)
-			if event.Type == linebot.EventTypeMessage {
+			switch event.Type {
+			case linebot.EventTypeAccountLink:
+				postMessage := linebot.NewTextMessage("replyToken :" + event.ReplyToken + "\n" + "link nonce :" + event.AccountLink.Nonce + "\n" + "result: " + string(event.AccountLink.Result))
+				if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
+					log.Print(err)
+				}
+			case linebot.EventTypeMessage:
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					source := event.Source
@@ -61,6 +67,7 @@ func main() {
 					}
 				}
 			}
+
 		}
 	})
 
