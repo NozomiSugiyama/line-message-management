@@ -1,6 +1,7 @@
 import { Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility"
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff"
+import cryptoRandomString from "crypto-random-string";
 import React, { useCallback, useContext, useState } from "react";
 import { RouteChildrenProps } from "react-router";
 import toObjectFromURIQuery from "src/api/toObjectFromURIQuery";
@@ -18,13 +19,16 @@ export default (props: TopPageProps) => {
 
     const linkToken = (toObjectFromURIQuery(location.search) || { "link-token": null })["link-token"];
     const submitForm = useCallback(
-        (e: React.FormEvent<HTMLFormElement>) => {
+        async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
 
             const email = (e.target as any).elements["sign-in-email"].value;
             const password = (e.target as any).elements["sign-in-password"].value;
 
-            notificationContext.notification("info", `${email}:${password}`);
+            const nonce = cryptoRandomString({ length: 255, type: "base64" });
+            await notificationContext.notification("info", `${email}:${password}`);
+            await notificationContext.notification("info", `nonce: ${nonce}`);
+            location.href = `https://access.line.me/dialog/bot/accountLink?linkToken=${linkToken}&nonce=${nonce}`;
         },
         [notificationContext.notification]
     );

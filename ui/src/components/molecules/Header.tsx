@@ -46,6 +46,8 @@ export default (
 const StyledAppBar = styled(AppBar)`
     && {
         width: calc(100% - 17rem - 6rem);
+        height: fit-content;
+        min-height: 56px;
         margin: 1rem 3rem 0 2rem;
         border-radius: 8px;
         color: #333;
