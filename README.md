@@ -12,8 +12,15 @@ $ docker-compose pull
 $ docker-compose up
 ```
 
+#### Modified postgres environment
+```bash
+$ docker-compose stop
+$ rm -rf ./db/data
+```
+
 ### Deploy
 
+#### Setup
 ```bash
 $ heroku login
 $ git remote add heroku-api https://git.heroku.com/line-message-management-api.git
@@ -21,9 +28,13 @@ $ git remote add heroku-api https://git.heroku.com/line-message-management-ui.gi
 $ heroku plugins:install heroku-config
 ```
 
+```bash
+$ heroku pg:psql -a line-message-management-api
+```
+
 #### Deploy API
 ```bash
-$ heroku config:push -f api/.env.production --app line-message-management-api # If modified .env file
+$ heroku config:push -f api/.env.production --app line-message-management-api -o # If modified .env file
 $ git subtree push --prefix api/ heroku-api master
 $ heroku run --app line-message-management-api ./bin/api dev # In dev mode
 ```
@@ -44,9 +55,7 @@ $ heroku logs --tail --app line-message-management-api
 $ heroku logs --tail --app line-message-management-ui
 ```
 
-### Development
-#### Modified postgres environment
+##### DB
 ```bash
-$ docker-compose stop
-$ rm -rf ./db/data
+$ heroku pg:info -a line-message-management-api
 ```

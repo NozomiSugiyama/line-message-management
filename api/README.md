@@ -20,3 +20,10 @@ $ vim .env # Edit .env file
 $ go build
 $ ./api dev
 ```
+
+#### docker compose
+```bash
+$ docker-compose up
+$ go build
+$ docker-compose restart api
+```

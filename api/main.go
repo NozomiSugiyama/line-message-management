@@ -2,17 +2,18 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
-	"fmt"
-	"github.com/jinzhu/gorm"
 	"time"
 
+	"github.com/jinzhu/gorm"
+
 	"api/database"
+	"api/database/model"
+	"api/handler"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 func main() {
@@ -33,6 +34,7 @@ func main() {
 		log.Println("Failed load " + envFile + " file")
 	}
 
+	// Get Environments
 	port := os.Getenv("PORT")
 	lineChannelSecret := os.Getenv("LINE_CHANNEL_SECRET")
 	lineChannelAccessToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
@@ -44,12 +46,14 @@ func main() {
 	postgresPassword := os.Getenv("POSTGRES_PASSWORD")
 	postgresSSLMode := os.Getenv("POSTGRES_SSL_MODE")
 
+	// default port number
 	if port == "" {
 		port = "8080"
 	}
 
 	var db *gorm.DB
 
+	// Connection attempt when connecting to DB with docker-compose
 	for i := 0; i < 10; i++ {
 		db, err = database.Initialize(postgresHost, postgresPort, postgresUser, postgresDatabase, postgresPassword, postgresSSLMode)
 		if err != nil {
@@ -65,54 +69,21 @@ func main() {
 		}
 	}
 
+	defer db.Close()
+
+	userRepo := model.NewUserRepository(db)
+	nonceRepo := model.NewNonceRepository(db)
+
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(database.Inject(db))
 
-	router.POST("/hook", func(c *gin.Context) {
-		client := &http.Client{Timeout: time.Duration(15 * time.Second)}
-		bot, err := linebot.New(lineChannelSecret, lineChannelAccessToken, linebot.WithHTTPClient(client))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		received, err := bot.ParseRequest(c.Request)
+	userHandler := handler.NewUserHandler(userRepo)
+	router.GET("/users/:userid", userHandler.GetUserByID)
 
-		for _, event := range received {
-			switch event.Type {
-			case linebot.EventTypeAccountLink:
-				postMessage := linebot.NewTextMessage("replyToken :" + event.ReplyToken + "\n" + "link nonce :" + event.AccountLink.Nonce + "\n" + "result: " + string(event.AccountLink.Result))
-				if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
-					log.Print(err)
-				}
-			case linebot.EventTypeMessage:
-				switch message := event.Message.(type) {
-				case *linebot.TextMessage:
-					source := event.Source
-					if source.Type == linebot.EventSourceTypeUser {
-						switch message.Text {
-						case "連携":
-							res, err := bot.IssueLinkToken(source.UserID).Do()
-							if err != nil {
-								log.Print(err)
-								return
-							}
-							postMessage := linebot.NewTextMessage(providerWebOrigin + "/client-sign-in?link-token=" + res.LinkToken)
-							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
-								log.Print(err)
-							}
-						default:
-							postMessage := linebot.NewTextMessage("reply :" + message.Text)
-							if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
-								log.Print(err)
-							}
-						}
-					}
-				}
-			}
-
-		}
-	})
+	hookHandler := handler.NewHookHandler(userRepo, nonceRepo, lineChannelSecret, lineChannelAccessToken, providerWebOrigin)
+	router.POST("/hook", hookHandler.PostHook)
 
 	router.Run(":" + port)
+	log.Println("Service starting on port " + port)
 }

@@ -7,10 +7,9 @@ services:
       - 8080:8080
     depends_on:
       - db
-    restart: always
     volumes:
-      - ./api:/go
-    command: ["/usr/src/app/api", "dev"]
+      - ./api:/usr/src/app
+    command: bash -c "go build /usr/src/app && /usr/src/app/api"
 
   ui:
     build: ./ui
