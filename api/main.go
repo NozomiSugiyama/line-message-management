@@ -18,7 +18,7 @@ import (
 func main() {
 
 	var mode string
-	if len(os.Args) > 0 {
+	if len(os.Args) >= 1 {
 		mode = os.Args[1]
 	}
 	var envFile string
