@@ -9,8 +9,8 @@ go version go1.12.1 darwin/amd64
 
 ### Setup
 ```bash
-$ cp .env.production.sample .env.development # dev mode
-$ cp .env.sample .env.production # prod mode
+$ cp .env.production.sample .env.production # dev mode
+$ cp .env.development.sample .env.development # prod mode
 $ vim .env # Edit .env file
 ```
 

@@ -17,17 +17,20 @@ import (
 
 func main() {
 
-	mode := os.Args[1]
+	var mode string
+	if len(os.Args) > 0 {
+		mode = os.Args[1]
+	}
 	var envFile string
-	if mode == "prod" {
-		envFile = ".env.production"
-	} else {
+	if mode == "dev" {
 		envFile = ".env.development"
+	} else {
+		envFile = ".env.production"
 	}
 
 	err := godotenv.Load(envFile)
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Failed load " + envFile + " file")
 	}
 
 	port := os.Getenv("PORT")

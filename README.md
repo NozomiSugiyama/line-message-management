@@ -23,12 +23,25 @@ $ heroku plugins:install heroku-config
 
 #### Deploy API
 ```bash
-$ heroku config:push -f api/.env.production --app line-message-management-api # if modified .env file
+$ heroku config:push -f api/.env.production --app line-message-management-api # If modified .env file
 $ git subtree push --prefix api/ heroku-api master
+$ heroku run --app line-message-management-api ./bin/api dev # In dev mode
 ```
+
 #### Deploy UI
 ```bash
 $ git subtree push --prefix ui/ heroku-ui master
+```
+
+#### Heroku logs
+##### API
+```bash
+$ heroku logs --tail --app line-message-management-api
+```
+
+##### UI
+```bash
+$ heroku logs --tail --app line-message-management-ui
 ```
 
 ### Development
