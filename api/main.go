@@ -79,7 +79,11 @@ func main() {
 	router.Use(database.Inject(db))
 
 	userHandler := handler.NewUserHandler(userRepo)
+	router.GET("/users", userHandler.GetUsers)
 	router.GET("/users/:userid", userHandler.GetUserByID)
+
+	authHandler := handler.NewAuthHandler(userRepo, nonceRepo)
+	router.GET("/auth/client-sign-in", authHandler.ClientSignIn)
 
 	hookHandler := handler.NewHookHandler(userRepo, nonceRepo, lineChannelSecret, lineChannelAccessToken, providerWebOrigin)
 	router.POST("/hook", hookHandler.PostHook)

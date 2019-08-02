@@ -21,7 +21,7 @@ $ go build
 $ ./api dev
 ```
 
-#### docker compose
+#### Docker compose
 ```bash
 $ docker-compose up
 $ go build

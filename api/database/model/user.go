@@ -11,8 +11,10 @@ type UserRepository struct {
 
 // User data model
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID       int    `gorm:"column:id;type:integer;primary_key;not null"`
+	Name     string `gorm:"column:name;type:text;not null"`
+	Email    string `gorm:"column:email;type:text;not null;unique"`
+	Password string `gorm:"column:password;type:text;not null"`
 }
 
 // NewUserRepository create user repository
@@ -31,13 +33,24 @@ func (repo *UserRepository) CreateUser(user *User) error {
 // ListUsers List users from store
 func (repo *UserRepository) ListUsers() ([]User, error) {
 	var users []User
-	repo.db.Find(&users)
-	return users, nil
+	err := repo.db.Table(UserTableName).Find(&users).Error
+	return users, err
 }
 
 // FindUserByID Find user by user id
-func (repo *UserRepository) FindUserByID(id string) (User, error) {
+func (repo *UserRepository) FindUserByID(id int) (User, error) {
 	var user User
-	repo.db.First(&user, id)
+	if err := repo.db.Table(UserTableName).First(&user, id).Error; gorm.IsRecordNotFoundError(err) {
+		return user, ErrRecordNotFound
+	}
+	return user, nil
+}
+
+// FindUserByEMail Find user by email
+func (repo *UserRepository) FindUserByEMail(email string) (User, error) {
+	var user User
+	if err := repo.db.Table(UserTableName).Where("email = ?", email).First(&user).Error; gorm.IsRecordNotFoundError(err) {
+		return user, ErrRecordNotFound
+	}
 	return user, nil
 }

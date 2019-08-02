@@ -11,10 +11,11 @@ type NonceRepository struct {
 
 // Nonce data model
 type Nonce struct {
-	gorm.Model
-	Text   string `sql:"type:text;"`
-	User   User   `gorm:"foreignkey:UserID"`
-	UserID uint
+	ID            int    `gorm:"column:id;type:integer;primary_key;not null"`
+	User          User   `gorm:"foreignkey:UserID"`
+	UserID        int    `gorm:"column:user_id;type:integer;not null"`
+	Nonce         string `gorm:"column:nonce;type:text;not null"`
+	LinkedAccount string `gorm:"column:linked_account;type:text;not null"`
 }
 
 // NewNonceRepository create nonce repository
@@ -26,13 +27,13 @@ func NewNonceRepository(db *gorm.DB) *NonceRepository {
 
 // CreateNonce Create nonce
 func (repo *NonceRepository) CreateNonce(nonce *Nonce) error {
-	repo.db.Table(NonceTableName).Create(nonce)
-	return nil
+	err := repo.db.Table(NonceTableName).Create(nonce).Error
+	return err
 }
 
 // ListNonces List nonces from store
 func (repo *NonceRepository) ListNonces() ([]Nonce, error) {
 	var nonces []Nonce
-	repo.db.Find(&nonces)
-	return nonces, nil
+	err := repo.db.Table(NonceTableName).Find(&nonces).Error
+	return nonces, err
 }

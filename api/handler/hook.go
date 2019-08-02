@@ -27,6 +27,7 @@ func NewHookHandler(userRepo *model.UserRepository, nonceRepo *model.NonceReposi
 	h.nonceRepository = nonceRepo
 	h.lineChannelSecret = lineChannelSecret
 	h.lineChannelAccessToken = lineChannelAccessToken
+	h.providerWebOrigin = providerWebOrigin
 	return h
 }
 
@@ -58,7 +59,7 @@ func (h *HookHandler) PostHook(c *gin.Context) {
 							log.Print(err)
 							return
 						}
-						postMessage := linebot.NewTextMessage(h.providerWebOrigin + "/client-sign-in?link-token=" + res.LinkToken)
+						postMessage := linebot.NewTextMessage(h.providerWebOrigin + "/client-sign-in?link-line-token=" + res.LinkToken)
 						if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
 							log.Print(err)
 						}

@@ -1,5 +1,5 @@
 export default {
     api: {
-        uri: ""
+        uri: "http://localhost:8080"
     }
 };

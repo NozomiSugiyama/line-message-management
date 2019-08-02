@@ -29,7 +29,8 @@ $ heroku plugins:install heroku-config
 ```
 
 ```bash
-$ heroku pg:psql -a line-message-management-api
+$ heroku pg:psql -a line-message-management-api -f ./db/sql/ddl.sql
+$ heroku pg:psql -a line-message-management-api -f ./db/sql/dml.sql
 ```
 
 #### Deploy API

@@ -2,30 +2,69 @@ package handler
 
 import (
 	"api/database/model"
+
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type UserHandler struct {
 	userRepository *model.UserRepository
 }
 
-func NewUserHandler(repo *model.UserRepository) *UserHandler {
+func NewUserHandler(userRepo *model.UserRepository) *UserHandler {
 	h := new(UserHandler)
-	h.userRepository = repo
+	h.userRepository = userRepo
 	return h
 }
 
-func (h *UserHandler) GetUserByID(c *gin.Context) {
-	userID := c.Param("userid")
-	var user, err = h.userRepository.FindUserByID(userID)
+func (h *UserHandler) GetUsers(c *gin.Context) {
+
+	users, err := h.userRepository.ListUsers()
 	if err != nil {
+		if err == model.ErrRecordNotFound {
+			c.Status(404)
+			return
+		}
+		c.Error(err)
+		return
+	}
+
+	var userResponses []UserResponse
+	for _, user := range users {
+		userResponses = append(
+			userResponses,
+			UserResponse{
+				ID:    user.ID,
+				Name:  user.Name,
+				Email: user.Email,
+			},
+		)
+	}
+	c.JSON(200, userResponses)
+}
+
+func (h *UserHandler) GetUserByID(c *gin.Context) {
+	userID, err := strconv.Atoi(c.Param("userid"))
+
+	if err != nil {
+		c.Status(400)
+		return
+	}
+
+	user, err := h.userRepository.FindUserByID(userID)
+	if err != nil {
+		if err == model.ErrRecordNotFound {
+			c.Status(404)
+			return
+		}
 		c.Error(err)
 		return
 	}
 
 	userResponse := UserResponse{
-		ID:   user.ID,
-		Name: user.Name,
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
 	}
 
 	c.JSON(200, userResponse)
@@ -33,6 +72,14 @@ func (h *UserHandler) GetUserByID(c *gin.Context) {
 
 // UserResponse user response model
 type UserResponse struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:email`
+}
+
+type NonceResponse struct {
+	ID            int    `json:"id"`
+	UserID        int    `json:"user_id"`
+	Nonce         string `json:"nonce"`
+	LinkedAccount string `json:"linked_account"`
 }

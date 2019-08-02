@@ -9,7 +9,7 @@ services:
       - db
     volumes:
       - ./api:/usr/src/app
-    command: bash -c "go build /usr/src/app && /usr/src/app/api"
+    command: bash -c "go build /usr/src/app && /usr/src/app/api dev"
 
   ui:
     build: ./ui
@@ -22,12 +22,23 @@ services:
   db:
     volumes:
       - ./db/data:/var/lib/postgresql/data
+      - ./db/sql:/sql
     env_file: ./db/.env.development
+    ports:
+      - 5432:5432
     image: postgres:11.4-alpine
     restart: always
+
+  pgweb:
+    image: sosedoff/pgweb
+    container_name: "pgweb"
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8081:8080
+      - 8082:8080
