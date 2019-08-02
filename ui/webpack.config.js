@@ -1,9 +1,10 @@
 const { DefinePlugin }     = require("webpack");
 const CopyWebpackPlugin    = require("copy-webpack-plugin");
 const path                 = require("path");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const HtmlWebpackPlugin    = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const HtmlWebpackPlugin    = require("html-webpack-plugin");
 // const UglifyJsPlugin       = require("uglifyjs-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 
@@ -17,7 +18,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            src: path.resolve(__dirname, 'src/'),
+            src: path.resolve(__dirname, "src/"),
         },
         modules: ["node_modules"],
         extensions: [".js", ".jsx", ".ts", ".tsx"]
@@ -31,7 +32,7 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader'
+                loader: "ts-loader"
             }
         ]
     },
@@ -58,6 +59,10 @@ module.exports = {
         )
     },
     plugins: [
+        new Dotenv({
+            path: NODE_ENV === "development" ? ".env.development" : ".env.production",
+            silent: true
+        }),
         // new BundleAnalyzerPlugin(),
         new DefinePlugin(
             Object.entries({ ...process.env, VERSION: require("./package.json").version })
@@ -82,7 +87,7 @@ module.exports = {
             filename: "index.html",
             template: "src/index.html"
         }),
-        new CopyWebpackPlugin([ { from: './assets', to: 'assets' } ])
+        new CopyWebpackPlugin([ { from: "./assets", to: "assets" } ])
     ],
     devServer: {
         open: true,

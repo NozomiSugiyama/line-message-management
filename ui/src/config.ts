@@ -1,5 +1,11 @@
+declare const process: {
+    env: {
+        [key: string]: string | undefined
+    }
+};
+
 export default {
     api: {
-        uri: "http://localhost:8080"
+        uri: process.env.API_URI
     }
 };
