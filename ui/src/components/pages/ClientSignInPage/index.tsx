@@ -26,6 +26,7 @@ export default (props: TopPageProps) => {
             const password = (e.target as any).elements["sign-in-password"].value;
 
             const token = await clientSignIn({ email, password }, !!linkLineToken);
+            console.log(token)
 
             // location.href = `https://access.line.me/dialog/bot/accountLink?linkToken=${linkLineToken}&nonce=${token.lineNonce}`;
         },
