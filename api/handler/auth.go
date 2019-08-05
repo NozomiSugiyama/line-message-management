@@ -40,7 +40,7 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 		return
     }
 
-	var credential Credential{
+	credential := Credential{
 		Email: user.Email,
 	}
 	if linkLine == "true" {
