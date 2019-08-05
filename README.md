@@ -24,7 +24,7 @@ $ rm -rf ./db/data
 ```bash
 $ heroku login
 $ git remote add heroku-api https://git.heroku.com/line-message-management-api.git
-$ git remote add heroku-api https://git.heroku.com/line-message-management-ui.git
+$ git remote add heroku-ui https://git.heroku.com/line-message-management-ui.git
 $ heroku plugins:install heroku-config
 ```
 
