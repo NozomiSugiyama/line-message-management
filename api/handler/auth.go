@@ -40,7 +40,9 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 		return
     }
 
-	var credential Credential
+	var credential Credential{
+		Email: user.Email,
+	}
 	if linkLine == "true" {
 		fmt.Println("linkLine == 'true'")
 		nonce := model.Nonce{
@@ -51,15 +53,7 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 
 		err = h.nonceRepository.CreateNonce(&nonce)
 
-		credential = Credential{
-			Email:     user.Email,
-			LineNonce: &nonce.Nonce,
-		}
-	} else {
-		fmt.Println("linkLine == 'false'")
-		credential = Credential{
-			Email: user.Email,
-		}
+		credential.LineNonce = &nonce.Nonce
 	}
 	c.JSON(200, credential)
 
