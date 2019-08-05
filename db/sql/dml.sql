@@ -21,11 +21,11 @@ SET row_security = off;
 --
 
 COPY public.users (id, name, email, password) FROM stdin;
-1	sample	user@example.com	password
-2	sample2	user2@example.com	password
-3	sample3	user3@example.com	password
-4	sample4	user4@example.com	password
-5	sample5	user5@example.com	password
+1	sample	user@example.com	$2a$10$J8qNsDTp/4WNIwZTmrERFOaMaGrpch1Lmu2nTptW.MEqSDjUHD3S2
+2	sample2	user2@example.com	$2a$10$JYC0IT5OcTDloMCLkOWH2.8H0lBIWlvL8bXeL5DRIsvj4FqaMbMQ2
+3	sample3	user3@example.com	$2a$10$Apb0Q1ALD213sX.GqjR5.efgu9uTDwF/xLYjUSe6ZXOpa0qj.1VxW
+4	sample4	user4@example.com	$2a$10$b90XtC2YNaB1.4eFBNc9Yu9U1fEgJKtv.lGC9lhgGFPIJWz4GDIOS
+5	sample5	user5@example.com	$2a$10$mcaNeLLDoKaVyryKsPqKwujVFM9fS9Ry0LlpdKCf5feJipIeYM1zi
 \.
 
 

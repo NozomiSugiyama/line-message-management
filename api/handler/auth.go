@@ -5,6 +5,7 @@ import (
 	crand "crypto/rand"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // AuthHandler handler model
@@ -31,6 +32,11 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+
+    err = passwordVerify(user.Password, requestCredential.Password)
+    if err != nil {
+        panic(err)
+    }
 
 	var credential Credential
 	if linkLine == "true" {
@@ -71,4 +77,17 @@ func secureRandomStr(b int) string {
 		panic(err)
 	}
 	return fmt.Sprintf("%x", k)
+}
+
+
+func passwordHash(pw string) (string, error) {
+    hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+    if err != nil {
+        return "", err
+    }
+    return string(hash), err
+}
+
+func passwordVerify(hash, pw string) error {
+    return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 }

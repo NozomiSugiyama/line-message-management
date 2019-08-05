@@ -20,6 +20,16 @@ $ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_manageme
 $ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_management -f /sql/dml.sql
 ```
 
+### Restore
+```bash
+$ docker-compose up -d db
+$ docker-compose exec db psql -h db -U postgres -p 5432 -f /sql/drop.sql
+$ docker-compose exec db psql -h db -U postgres -p 5432
+> CREATE DATABASE line_message_management;
+$ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_management -f /sql/ddl.sql
+$ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_management -f /sql/dml.sql
+```
+
 ### Debug
 ```bash
 $ docker-compose up db

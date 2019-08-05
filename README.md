@@ -28,6 +28,7 @@ $ git remote add heroku-api https://git.heroku.com/line-message-management-ui.gi
 $ heroku plugins:install heroku-config
 ```
 
+#### Setup DB
 ```bash
 $ heroku pg:psql -a line-message-management-api -f ./db/sql/ddl.sql
 $ heroku pg:psql -a line-message-management-api -f ./db/sql/dml.sql
@@ -45,7 +46,7 @@ $ heroku run --app line-message-management-api ./bin/api dev # In dev mode
 $ git subtree push --prefix ui/ heroku-ui master
 ```
 
-#### Heroku logs
+#### Debug
 ##### API
 ```bash
 $ heroku logs --tail --app line-message-management-api
@@ -59,4 +60,5 @@ $ heroku logs --tail --app line-message-management-ui
 ##### DB
 ```bash
 $ heroku pg:info -a line-message-management-api
+$ heroku pg:psql -a line-message-management-api
 ```
