@@ -7,7 +7,7 @@ export interface Credential {
 
 export interface Token {
     email: string;
-    lineNonce: string;
+    line_nonce: string;
 }
 
 export default async ({ email, password }: Credential, linkLine?: boolean) => {
@@ -23,5 +23,5 @@ export default async ({ email, password }: Credential, linkLine?: boolean) => {
         throw response;
     }
 
-    return await response.json() as Token;
+    return (await response.json()) as Token;
 };
