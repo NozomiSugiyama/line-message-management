@@ -35,11 +35,14 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 
     err = passwordVerify(user.Password, requestCredential.Password)
     if err != nil {
-        panic(err)
+		c.Error(err)
+		fmt.Println("password verify error")
+		return
     }
 
 	var credential Credential
 	if linkLine == "true" {
+		fmt.Println("linkLine == 'true'")
 		nonce := model.Nonce{
 			UserID:        user.ID,
 			Nonce:         secureRandomStr(16),
@@ -53,6 +56,7 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 			LineNonce: &nonce.Nonce,
 		}
 	} else {
+		fmt.Println("linkLine == 'false'")
 		credential = Credential{
 			Email: user.Email,
 		}
