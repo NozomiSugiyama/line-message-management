@@ -43,6 +43,7 @@ $ heroku run --app line-message-management-api ./bin/api dev # In dev mode
 
 #### Deploy UI
 ```bash
+$ heroku config:push -f ui/.env.production --app line-message-management-ui -o # If modified .env file
 $ git subtree push --prefix ui/ heroku-ui master
 ```
 
@@ -62,3 +63,12 @@ $ heroku logs --tail --app line-message-management-ui
 $ heroku pg:info -a line-message-management-api
 $ heroku pg:psql -a line-message-management-api
 ```
+
+<!--
+
+```bash
+$ git push heroku-api `git subtree split --prefix api/ master`:master --force
+$ git push heroku-ui `git subtree split --prefix ui/ master`:master --force
+```
+
+-->
