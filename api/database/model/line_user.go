@@ -4,8 +4,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// LineUsersRepository repository model
-type LineUsersRepository struct {
+// LineUserRepository repository model
+type LineUserRepository struct {
 	db *gorm.DB
 }
 
@@ -18,21 +18,21 @@ type LineUser struct {
 	LinkedAccount string `gorm:"column:linked_account;type:text;not null"`
 }
 
-// NewLineUsersRepository create nonce repository
-func NewLineUsersRepository(db *gorm.DB) *LineUsersRepository {
-	repo := new(LineUsersRepository)
+// NewLineUserRepository create nonce repository
+func NewLineUserRepository(db *gorm.DB) *LineUserRepository {
+	repo := new(LineUserRepository)
 	repo.db = db
 	return repo
 }
 
 // CreateLineUser Create nonce
-func (repo *LineUsersRepository) CreateLineUser(nonce *LineUser) error {
+func (repo *LineUserRepository) CreateLineUser(nonce *LineUser) error {
 	err := repo.db.Table(LineUserTableName).Create(nonce).Error
 	return err
 }
 
 // ListLineUsers List nonces from store
-func (repo *LineUsersRepository) ListLineUsers() ([]LineUser, error) {
+func (repo *LineUserRepository) ListLineUsers() ([]LineUser, error) {
 	var nonces []LineUser
 	err := repo.db.Table(LineUserTableName).Find(&nonces).Error
 	return nonces, err

@@ -33,12 +33,12 @@ func (h *AuthHandler) ClientSignIn(c *gin.Context) {
 		return
 	}
 
-    err = passwordVerify(user.Password, requestCredential.Password)
-    if err != nil {
+	err = passwordVerify(user.Password, requestCredential.Password)
+	if err != nil {
 		c.Error(err)
 		fmt.Println("password verify error")
 		return
-    }
+	}
 
 	credential := Credential{
 		Email: user.Email,
@@ -77,15 +77,14 @@ func secureRandomStr(b int) string {
 	return fmt.Sprintf("%x", k)
 }
 
-
 func passwordHash(pw string) (string, error) {
-    hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
-    if err != nil {
-        return "", err
-    }
-    return string(hash), err
+	hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), err
 }
 
 func passwordVerify(hash, pw string) error {
-    return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 }

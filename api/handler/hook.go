@@ -15,16 +15,18 @@ import (
 type HookHandler struct {
 	userRepository         *model.UserRepository
 	nonceRepository        *model.NonceRepository
+	lineUserRepository     *model.LineUserRepository
 	lineChannelSecret      string
 	lineChannelAccessToken string
 	providerWebOrigin      string
 }
 
 // NewHookHandler create new hook handler
-func NewHookHandler(userRepo *model.UserRepository, nonceRepo *model.NonceRepository, lineChannelSecret string, lineChannelAccessToken string, providerWebOrigin string) *HookHandler {
+func NewHookHandler(userRepo *model.UserRepository, nonceRepo *model.NonceRepository, lineUserRepo *model.LineUserRepository, lineChannelSecret string, lineChannelAccessToken string, providerWebOrigin string) *HookHandler {
 	h := new(HookHandler)
 	h.userRepository = userRepo
 	h.nonceRepository = nonceRepo
+	h.lineUserRepository = lineUserRepo
 	h.lineChannelSecret = lineChannelSecret
 	h.lineChannelAccessToken = lineChannelAccessToken
 	h.providerWebOrigin = providerWebOrigin
@@ -43,6 +45,13 @@ func (h *HookHandler) PostHook(c *gin.Context) {
 	for _, event := range received {
 		switch event.Type {
 		case linebot.EventTypeAccountLink:
+			nonce, err := h.nonceRepository.FindNonceByNonce(event.AccountLink.Nonce)
+			lineUser := model.LineUser{
+				UserID:        nonce.UserID,
+				LineID:        event.Source.UserID,
+				LinkedAccount: nonce.LinkedAccount,
+			}
+			h.lineUserRepository.CreateLineUser(&lineUser)
 			postMessage := linebot.NewTextMessage("replyToken :" + event.ReplyToken + "\n" + "link nonce :" + event.AccountLink.Nonce + "\n" + "result: " + string(event.AccountLink.Result))
 			if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
 				log.Print(err)

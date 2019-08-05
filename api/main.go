@@ -12,9 +12,9 @@ import (
 	"api/database/model"
 	"api/handler"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -74,6 +74,7 @@ func main() {
 
 	userRepo := model.NewUserRepository(db)
 	nonceRepo := model.NewNonceRepository(db)
+	lineUserRepo := model.NewLineUserRepository(db)
 
 	router := gin.New()
 	router.Use(gin.Logger())
@@ -87,7 +88,7 @@ func main() {
 	authHandler := handler.NewAuthHandler(userRepo, nonceRepo)
 	router.POST("/auth/client-sign-in", authHandler.ClientSignIn)
 
-	hookHandler := handler.NewHookHandler(userRepo, nonceRepo, lineChannelSecret, lineChannelAccessToken, providerWebOrigin)
+	hookHandler := handler.NewHookHandler(userRepo, nonceRepo, lineUserRepo, lineChannelSecret, lineChannelAccessToken, providerWebOrigin)
 	router.POST("/hook", hookHandler.PostHook)
 
 	router.Run(":" + port)

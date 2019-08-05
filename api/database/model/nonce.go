@@ -31,6 +31,15 @@ func (repo *NonceRepository) CreateNonce(nonce *Nonce) error {
 	return err
 }
 
+// FindNonceByNonce Find nonce by nonce
+func (repo *NonceRepository) FindNonceByNonce(nonceValue string) (Nonce, error) {
+	var nonce Nonce
+	if err := repo.db.Table(NonceTableName).First(&nonce, nonceValue).Error; gorm.IsRecordNotFoundError(err) {
+		return nonce, ErrRecordNotFound
+	}
+	return nonce, nil
+}
+
 // ListNonces List nonces from store
 func (repo *NonceRepository) ListNonces() ([]Nonce, error) {
 	var nonces []Nonce
