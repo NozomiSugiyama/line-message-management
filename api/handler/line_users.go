@@ -141,21 +141,64 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 
 	sendingMessages := []linebot.SendingMessage{
 		linebot.NewTextMessage("Hello, world"),
-		linebot.NewImageMessage("http://line-message-management-ui.herokuapp.com/assets/img/no-image.png", "https://example.com/preview.jpg"),
+		linebot.NewImageMessage("http://line-message-management-ui.herokuapp.com/assets/img/lenet-logo.png", "http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png"),
 		linebot.NewStickerMessage("1", "1"),
 		linebot.NewLocationMessage("title", "address", 35.65910807942215, 139.70372892916203),
 		linebot.NewTemplateMessage(
 			"this is a buttons template",
 			linebot.NewButtonsTemplate(
-				"https://example.com/bot/images/image.jpg",
+				"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
 				"Menu",
 				"Please select",
-				NewPostbackAction("Buy", "action=buy&itemid=123", "", "displayText"),
-				NewPostbackAction("Buy", "action=buy&itemid=123", "text", ""),
-				NewURIAction("View detail", "https://example.com/page/123"),
+				linebot.NewPostbackAction("Buy", "action=buy&itemid=123", "", "displayText"),
+				linebot.NewPostbackAction("Buy", "action=buy&itemid=123", "text", ""),
+				linebot.NewURIAction("View detail", "https://example.com/page/123"),
 			),
 		),
-
+		linebot.NewTemplateMessage(
+			"this is a buttons template",
+			linebot.NewButtonsTemplate(
+				"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
+				"Menu",
+				"Please select a date, time or datetime",
+				linebot.NewDatetimePickerAction("Date", "action=sel&only=date", "date", "2017-09-01", "2017-09-03", ""),
+				linebot.NewDatetimePickerAction("Time", "action=sel&only=time", "time", "", "23:59", "00:00"),
+				linebot.NewDatetimePickerAction("DateTime", "action=sel", "datetime", "2017-09-01T12:00", "", ""),
+			),
+		),
+		linebot.NewTemplateMessage(
+			"this is a image carousel template",
+			linebot.NewImageCarouselTemplate(
+				linebot.NewImageCarouselColumn(
+					"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
+					linebot.NewURIAction("View detail", "https://example.com/page/111"),
+				),
+			),
+		),
+		linebot.NewFlexMessage(
+			"this is a flex message",
+			&linebot.BubbleContainer{
+				Type: linebot.FlexContainerTypeBubble,
+				Body: &linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeVertical,
+					Contents: []linebot.FlexComponent{
+						&linebot.TextComponent{
+							Type: linebot.FlexComponentTypeText,
+							Text: "hello",
+						},
+						&linebot.TextComponent{
+							Type: linebot.FlexComponentTypeText,
+							Text: "world",
+							Flex: linebot.IntPtr(0),
+						},
+						&linebot.SpacerComponent{
+							Type: linebot.FlexComponentTypeSpacer,
+						},
+					},
+				},
+			},
+		),
 	}
 
 	for _, message := range sendingMessages {
