@@ -141,8 +141,21 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 
 	sendingMessages := []linebot.SendingMessage{
 		linebot.NewTextMessage("Hello, world"),
-		linebot.NewImageMessage("https://example.com/original.jpg", "https://example.com/preview.jpg"),
+		linebot.NewImageMessage("http://line-message-management-ui.herokuapp.com/assets/img/no-image.png", "https://example.com/preview.jpg"),
 		linebot.NewStickerMessage("1", "1"),
+		linebot.NewLocationMessage("title", "address", 35.65910807942215, 139.70372892916203),
+		linebot.NewTemplateMessage(
+			"this is a buttons template",
+			linebot.NewButtonsTemplate(
+				"https://example.com/bot/images/image.jpg",
+				"Menu",
+				"Please select",
+				NewPostbackAction("Buy", "action=buy&itemid=123", "", "displayText"),
+				NewPostbackAction("Buy", "action=buy&itemid=123", "text", ""),
+				NewURIAction("View detail", "https://example.com/page/123"),
+			),
+		),
+
 	}
 
 	for _, message := range sendingMessages {
