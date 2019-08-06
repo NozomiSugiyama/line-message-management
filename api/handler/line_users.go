@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"api/database/model"
 
 	"strconv"
@@ -141,13 +142,13 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 
 	sendingMessages := []linebot.SendingMessage{
 		linebot.NewTextMessage("Hello, world"),
-		linebot.NewImageMessage("http://line-message-management-ui.herokuapp.com/assets/img/lenet-logo.png", "http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png"),
+		linebot.NewImageMessage("https://picsum.photos/id/1/300/300", "https://picsum.photos/id/2/300/300"),
 		linebot.NewStickerMessage("1", "1"),
 		linebot.NewLocationMessage("title", "address", 35.65910807942215, 139.70372892916203),
 		linebot.NewTemplateMessage(
 			"this is a buttons template",
 			linebot.NewButtonsTemplate(
-				"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
+				"https://picsum.photos/id/3/300/300",
 				"Menu",
 				"Please select",
 				linebot.NewPostbackAction("Buy", "action=buy&itemid=123", "", "displayText"),
@@ -158,7 +159,7 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 		linebot.NewTemplateMessage(
 			"this is a buttons template",
 			linebot.NewButtonsTemplate(
-				"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
+				"https://picsum.photos/id/4/300/300",
 				"Menu",
 				"Please select a date, time or datetime",
 				linebot.NewDatetimePickerAction("Date", "action=sel&only=date", "date", "2017-09-01", "2017-09-03", ""),
@@ -170,7 +171,7 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 			"this is a image carousel template",
 			linebot.NewImageCarouselTemplate(
 				linebot.NewImageCarouselColumn(
-					"http://line-message-management-ui.herokuapp.com/assets/img/main_offer_sp.png",
+					"https://picsum.photos/id/5/300/300",
 					linebot.NewURIAction("View detail", "https://example.com/page/111"),
 				),
 			),
@@ -204,8 +205,7 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 	for _, message := range sendingMessages {
 		_, err = bot.PushMessage(lineUserID, message).Do()
 		if err != nil {
-			c.Error(err)
-			return
+			fmt.Println(err)
 		}
 	}
 
