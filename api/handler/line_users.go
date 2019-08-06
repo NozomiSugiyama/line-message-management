@@ -35,22 +35,43 @@ func (h *LineUserHandler) GetLineUsers(c *gin.Context) {
 		return
 	}
 
+	bot, err := linebot.New(h.lineChannelSecret, h.lineChannelAccessToken)
+
 	var lineUserResponses []LineUserResponse
 	for _, lineUser := range lineUsers {
-		lineUserResponses = append(
-			lineUserResponses,
-			LineUserResponse{
-				ID:     lineUser.ID,
-				UserID: lineUser.UserID,
-				LineID: lineUser.LineID,
-				User: UserResponse{
-					ID:    lineUser.User.ID,
-					Name:  lineUser.User.Name,
-					Email: lineUser.User.Email,
+		userProfile, err := bot.GetProfile(lineUser.LineID).Do()
+		if err == nil {
+			lineUserResponses = append(
+				lineUserResponses,
+				LineUserResponse{
+					ID:     lineUser.ID,
+					UserID: lineUser.UserID,
+					LineID: lineUser.LineID,
+					DisplayName: &userProfile.DisplayName,
+					User: UserResponse{
+						ID:    lineUser.User.ID,
+						Name:  lineUser.User.Name,
+						Email: lineUser.User.Email,
+					},
+					LinkedAccount: lineUser.LinkedAccount,
 				},
-				LinkedAccount: lineUser.LinkedAccount,
-			},
-		)
+			)
+		} else {
+			lineUserResponses = append(
+				lineUserResponses,
+				LineUserResponse{
+					ID:     lineUser.ID,
+					UserID: lineUser.UserID,
+					LineID: lineUser.LineID,
+					User: UserResponse{
+						ID:    lineUser.User.ID,
+						Name:  lineUser.User.Name,
+						Email: lineUser.User.Email,
+					},
+					LinkedAccount: lineUser.LinkedAccount,
+				},
+			)
+		}
 	}
 	c.JSON(200, lineUserResponses)
 }
@@ -83,6 +104,13 @@ func (h *LineUserHandler) GetLineUserByID(c *gin.Context) {
 			Email: lineUser.User.Email,
 		},
 		LinkedAccount: lineUser.LinkedAccount,
+	}
+
+	bot, err := linebot.New(h.lineChannelSecret, h.lineChannelAccessToken)
+	userProfile, err := bot.GetProfile(lineUser.LineID).Do()
+
+	if err == nil {
+		lineUserResponse.DisplayName = &userProfile.DisplayName
 	}
 
 	c.JSON(200, lineUserResponse)
@@ -135,6 +163,7 @@ type LineUserResponse struct {
 	User          UserResponse `json:"user"`
 	LineID        string       `json:"line_id"`
 	LinkedAccount string       `json:"linked_account"`
+	DisplayName   *string      `json:"display_name"`
 }
 
 type Message struct {

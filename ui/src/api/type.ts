@@ -18,6 +18,7 @@ export interface LineUser {
     user: User;
     line_id: string;
     linked_account: "main";
+    display_name?: string;
 }
 
 export type LineUsers = LineUser[];

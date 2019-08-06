@@ -1,16 +1,16 @@
-import { Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, DialogActions, Button } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { RouteChildrenProps } from "react-router";
 import { read } from "src/api/line_users";
+import send_message from "src/api/line_users/send_message";
+import send_test_messages from "src/api/line_users/send_test_messages";
 import { LineUser, LineUsers } from "src/api/type";
+import FlexibleSpace from "src/components/atoms/FlexibleSpace";
 import Page from "src/components/atoms/Page";
+import ChatWidget from "src/components/molecules/ChatWidget";
 import Header from "src/components/molecules/Header";
 import LabeledTypography from "src/components/molecules/LabeledTypography";
 import styled from "styled-components";
-import ChatWidget from "src/components/molecules/ChatWidget";
-import send_message from "src/api/line_users/send_message";
-import FlexibleSpace from "src/components/atoms/FlexibleSpace";
-import send_test_messages from "src/api/line_users/send_test_messages";
 
 export type LineUsersPageProps = React.ComponentProps<typeof Page> & RouteChildrenProps<{problemId: string}>;
 
@@ -61,6 +61,7 @@ export default (props: LineUsersPageProps) => {
                     <div>
                         <LabeledTypography label="Linked Account">{selectedLineUser && selectedLineUser.linked_account}</LabeledTypography>
                         <LabeledTypography label="Line ID">{selectedLineUser && selectedLineUser.line_id}</LabeledTypography>
+                        <LabeledTypography label="Display Name">{selectedLineUser && selectedLineUser.display_name}</LabeledTypography>
                     </div>
                 </StyledDialogContent>
                 <DialogContent>
@@ -69,7 +70,7 @@ export default (props: LineUsersPageProps) => {
                             if (!selectedLineUser) {
                                 return;
                             }
-                            send_message({ message, id: selectedLineUser.id });
+                            send_message({ message, id: selectedLineUser.line_id });
                         }}
                     />
                 </DialogContent>
@@ -81,7 +82,7 @@ export default (props: LineUsersPageProps) => {
                             if (!selectedLineUser) {
                                 return;
                             }
-                            send_test_messages({ id: selectedLineUser.id });
+                            send_test_messages({ id: selectedLineUser.line_id });
                         }}
                     >
                         Send Test Messages
