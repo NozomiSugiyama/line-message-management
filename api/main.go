@@ -91,6 +91,12 @@ func main() {
 	hookHandler := handler.NewHookHandler(userRepo, nonceRepo, lineUserRepo, lineChannelSecret, lineChannelAccessToken, providerWebOrigin)
 	router.POST("/hook", hookHandler.PostHook)
 
+	lineUserHandler := handler.NewLineUserHandler(lineUserRepo, lineChannelSecret, lineChannelAccessToken)
+	router.GET("/line_users", lineUserHandler.GetLineUsers)
+	router.GET("/line_users/:lineuserid", lineUserHandler.GetLineUserByID)
+	router.POST("/line_users/:lineuserid/send_message", lineUserHandler.SendMessageByLineUserID)
+	router.POST("/line_users/:lineuserid/send_test_messages", lineUserHandler.SendTestMessagesByLineUserID)
+
 	router.Run(":" + port)
 	log.Println("Service starting on port " + port)
 }

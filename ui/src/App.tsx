@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Root from "src/Root";
 import {
     ClientSignInPage,
+    LineUsersPage,
     NotFoundPage,
     TopPage
 } from "src/Routes";
@@ -14,6 +15,11 @@ export default () => (
                 <Route
                     path="/"
                     component={TopPage}
+                    exact
+                />
+                <Route
+                    path="/line-users"
+                    component={LineUsersPage}
                     exact
                 />
                 <Route

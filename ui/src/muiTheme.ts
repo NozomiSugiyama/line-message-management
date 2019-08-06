@@ -19,6 +19,11 @@ export default createMuiTheme({
                 color: "#333",
             },
         },
+        MuiListItem: {
+            root: {
+                borderRadius: 4
+            }
+        }
     },
     palette: {
         primary: {

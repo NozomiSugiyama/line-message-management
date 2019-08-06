@@ -33,6 +33,7 @@ $ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_manageme
 ### Debug
 ```bash
 $ docker-compose up db
+$ docker-compose exec db psql -h db -U postgres -p 5432 -d line_message_management
 ```
 
 #### CLI

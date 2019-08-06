@@ -74,12 +74,5 @@ func (h *UserHandler) GetUserByID(c *gin.Context) {
 type UserResponse struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
-	Email string `json:email`
-}
-
-type NonceResponse struct {
-	ID            int    `json:"id"`
-	UserID        int    `json:"user_id"`
-	Nonce         string `json:"nonce"`
-	LinkedAccount string `json:"linked_account"`
+	Email string `json:"email"`
 }

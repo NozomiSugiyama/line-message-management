@@ -1,13 +1,9 @@
+import { Token } from "src/api/type";
 import config from "src/config";
 
 export interface Credential {
     email: string;
     password: string;
-}
-
-export interface Token {
-    email: string;
-    line_nonce: string;
 }
 
 export default async ({ email, password }: Credential, linkLine?: boolean) => {

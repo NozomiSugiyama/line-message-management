@@ -5,12 +5,12 @@ import React, { useCallback, useContext, useState } from "react";
 import { RouteChildrenProps } from "react-router";
 import clientSignIn from "src/api/auth/clientSignIn";
 import toObjectFromURIQuery from "src/api/toObjectFromURIQuery";
+import Page from "src/components/atoms/Page";
 import Header from "src/components/molecules/Header";
-import Host from "src/components/pages/ClientSignInPage/Host";
 import NotificationContext from "src/contexts/NotificationContext";
 import styled from "styled-components";
 
-export type TopPageProps = React.ComponentProps<typeof Host> & RouteChildrenProps<{problemId: string}>;
+export type TopPageProps = React.ComponentProps<typeof Page> & RouteChildrenProps<{problemId: string}>;
 
 export default (props: TopPageProps) => {
     const [passwordIsVisible, setPasswordVisibility] = useState<boolean>(false);
@@ -34,7 +34,7 @@ export default (props: TopPageProps) => {
     );
 
     return (
-        <Host
+        <Page
             {...props}
         >
             <Header
@@ -84,7 +84,7 @@ export default (props: TopPageProps) => {
             <div>
                 <div>Link line token: {linkLineToken}</div>
             </div>
-        </Host>
+        </Page>
     );
 };
 
