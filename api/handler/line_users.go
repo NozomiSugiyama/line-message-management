@@ -142,7 +142,7 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 
 	sendingMessages := []linebot.SendingMessage{
 		linebot.NewTextMessage("Hello, world"),
-		linebot.NewImageMessage("https://picsum.photos/id/1/300/300", "https://picsum.photos/id/2/300/300"),
+		linebot.NewImageMessage("https://example.com/page/123", "https://picsum.photos/id/2/300/300"),
 		linebot.NewStickerMessage("1", "1"),
 		linebot.NewLocationMessage("title", "address", 35.65910807942215, 139.70372892916203),
 		linebot.NewTemplateMessage(
@@ -174,7 +174,27 @@ func (h *LineUserHandler) SendTestMessagesByLineUserID(c *gin.Context) {
 					"https://picsum.photos/id/5/300/300",
 					linebot.NewURIAction("View detail", "https://example.com/page/111"),
 				),
+				linebot.NewImageCarouselColumn(
+					"https://picsum.photos/id/6/300/300",
+					linebot.NewURIAction("View detail", "https://example.com/page/111"),
+				),
+				linebot.NewImageCarouselColumn(
+					"https://picsum.photos/id/7/300/300",
+					linebot.NewURIAction("View detail", "https://example.com/page/111"),
+				),
 			),
+		),
+		linebot.NewFlexMessage(
+			"this is a image carousel template",
+			&linebot.BubbleContainer{
+				Type: linebot.FlexContainerTypeBubble,
+				Hero: &linebot.ImageComponent{
+					URL: "https://picsum.photos/id/8/1040/1040",
+					Type: "image",
+					Size: "full",
+					Action: linebot.NewURIAction("View detail", "https://example.com/page/111"),
+				},
+			},
 		),
 		linebot.NewFlexMessage(
 			"this is a flex message",
