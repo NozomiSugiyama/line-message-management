@@ -43,19 +43,19 @@ func (h *HookHandler) PostHook(c *gin.Context) {
 	received, err := bot.ParseRequest(c.Request)
 
 	for _, event := range received {
-		switch event.Type {
-		case linebot.EventTypeAccountLink:
-			nonce, err := h.nonceRepository.FindNonceByNonce(event.AccountLink.Nonce)
-			lineUser := model.LineUser{
-				UserID:        nonce.UserID,
-				LineID:        event.Source.UserID,
-				LinkedAccount: nonce.LinkedAccount,
-			}
-			h.lineUserRepository.CreateLineUser(&lineUser)
-			postMessage := linebot.NewTextMessage("replyToken :" + event.ReplyToken + "\n" + "link nonce :" + event.AccountLink.Nonce + "\n" + "result: " + string(event.AccountLink.Result))
-			if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
-				log.Print(err)
-			}
+	switch event.Type {
+	case linebot.EventTypeAccountLink:
+		nonce, err := h.nonceRepository.FindNonceByNonce(event.AccountLink.Nonce)
+		lineUser := model.LineUser{
+			UserID:        nonce.UserID,
+			LineID:        event.Source.UserID,
+			LinkedAccount: nonce.LinkedAccount,
+		}
+		h.lineUserRepository.CreateLineUser(&lineUser)
+		postMessage := linebot.NewTextMessage("replyToken :" + event.ReplyToken + "\n" + "link nonce :" + event.AccountLink.Nonce + "\n" + "result: " + string(event.AccountLink.Result))
+		if _, err = bot.ReplyMessage(event.ReplyToken, postMessage).Do(); err != nil {
+			log.Print(err)
+		}
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
